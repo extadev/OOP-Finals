@@ -1,17 +1,34 @@
+import java.time.LocalDate;
+
 public class Tasks {
 
-    private String tasks;
+    private String task;
+    private LocalDate date;
 
-    Tasks(String newTask) {
-        tasks = newTask;
+    Tasks(String newTask, LocalDate newDate) {
+        task = newTask;  
+        date = newDate;      
     }
 
-    // public void Tasks(String newTask) {
-    //     tasks = newTask;
-    // }
+    Tasks(String newTask) {
+        task = newTask;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
 
     @Override
     public String toString() {
-        return tasks;
+        if (date != null) {
+            return task + " - " + date;
+        }
+        else {
+            return task + " - " + "No due date.";
+        }
     }
 }
