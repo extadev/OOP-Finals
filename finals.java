@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class finals extends Application {
     
     ArrayList<ArrayList<Tasks>> main_server = new ArrayList();
+    ArrayList<Tasks> date_server = new ArrayList<>();
     
     
     public static void main(String[] args) {
@@ -38,20 +39,20 @@ public class finals extends Application {
         HBox hb2 = new HBox(); 
         hb2.setAlignment(Pos.TOP_LEFT);
         hb2.setPrefWidth(1000);  
-        hb2.setPrefHeight(100);
+        hb2.setPrefHeight(400);
         hb2.setSpacing(5);
         
         HBox hb3 = new HBox(); 
         hb3.setAlignment(Pos.TOP_LEFT);
         hb3.setPrefWidth(1000);  
-        hb3.setPrefHeight(20);
+        hb3.setPrefHeight(100);
         hb3.setSpacing(5);
         
-        HBox hb4 = new HBox(); 
-        hb3.setAlignment(Pos.TOP_LEFT);
-        hb3.setPrefWidth(1000);  
-        hb3.setPrefHeight(20);
-        hb3.setSpacing(5);
+        HBox vb1 = new HBox(); 
+        vb1.setAlignment(Pos.TOP_LEFT);
+        vb1.setPrefWidth(500);  
+        vb1.setPrefHeight(700);
+        vb1.setSpacing(5);
         
         VBox vbmain = new VBox();
         vbmain.setAlignment(Pos.TOP_LEFT);
@@ -99,31 +100,44 @@ public class finals extends Application {
         // DISPLAYING
         // - hb3 (title area)
         Label lbltitle = new Label("Tasks:" + "Noob");
-        // - hb4 (text area/display)
-        Label lblarea = new Label("1. First fucking task");
         //
         
 
         // BTN METHODS
         // --- needs indexing to specify which index to remove (as shown:)
-        AtomicInteger btnadd_count = new AtomicInteger(0);
+        AtomicInteger btnadd_count = new AtomicInteger(0); //AtomicInt (bluetooth int vers.)
         btnadd.setOnAction(e -> {
-            btnadd_count.incrementAndGet();
+            btnadd_count.incrementAndGet(); // similar to ++ incrementing to int (but to AtomicInt)
             ArrayList<Tasks> taskdate_placeholder = new ArrayList();
             
             if (datepick.getValue() != null) {
                 System.out.println("if ran");
                 System.out.println(datepick.getValue());
                 taskdate_placeholder.add(new Tasks(tftask.getText(), datepick.getValue()));
+                Tasks date = new Tasks(datepick.getValue());
+                date_server.add(date);
             }
             else {
                 taskdate_placeholder.add(new Tasks(tftask.getText()));
                 System.out.println("else ran");
             }
-
-            System.out.println(taskdate_placeholder);
+            
+            System.out.println(taskdate_placeholder); // -- 4 remove
             main_server.add(taskdate_placeholder);
-            System.out.println(main_server);
+            System.out.println(main_server); // -- 4 remove
+
+            for (int i = 0; i < btnadd_count.get(); i++) {
+                if (datepick.getValue() != null) {
+                    Label lblarea = new Label((i+1) + ". " + new Tasks(tftask.getText(), datepick.getValue()));
+                    vb1.getChildren().addAll(lblarea);
+                }
+                else {
+                    Label lblarea = new Label((i+1) + ". " + new Tasks(tftask.getText()));
+                    vb1.getChildren().addAll(lblarea);
+                    
+                }
+            } // (i+1) so that it starts with 1 instead of 0 (due to i = 0)
+            vbmain.getChildren().add(vb1); // bro idk why add() doesnt work, but if aint broke dont fix 
         });
         //
 
@@ -131,8 +145,8 @@ public class finals extends Application {
         hb1.getChildren().addAll(lbltask, tftask, lbldate, datepick, lblindex);
         hb2.getChildren().addAll(btnadd, btndel, btnmod, btnsort);
         hb3.getChildren().addAll(lbltitle);
-        hb4.getChildren().addAll(lblarea);
-        vbmain.getChildren().addAll(hb1, hb2, hb3, hb4);
+//        hb4.getChildren().addAll(lblarea); --- previous position of hb4
+        vbmain.getChildren().addAll(hb1, hb2, hb3, vb1);
         root.getChildren().addAll(vbmain);
         root.setPadding(new Insets(20));
         ps.setTitle("To-Do List with Dates");
