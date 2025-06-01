@@ -39,7 +39,7 @@ public class finals extends Application {
         HBox hb2 = new HBox(); 
         hb2.setAlignment(Pos.TOP_LEFT);
         hb2.setPrefWidth(1000);  
-        hb2.setPrefHeight(400);
+        hb2.setPrefHeight(100);
         hb2.setSpacing(5);
         
         HBox hb3 = new HBox(); 
@@ -51,7 +51,7 @@ public class finals extends Application {
         HBox vb1 = new HBox(); 
         vb1.setAlignment(Pos.TOP_LEFT);
         vb1.setPrefWidth(500);  
-        vb1.setPrefHeight(700);
+        vb1.setPrefHeight(20);
         vb1.setSpacing(5);
         
         VBox vbmain = new VBox();
@@ -126,18 +126,28 @@ public class finals extends Application {
             main_server.add(taskdate_placeholder);
             System.out.println(main_server); // -- 4 remove
 
-            for (int i = 0; i < btnadd_count.get(); i++) {
-                if (datepick.getValue() != null) {
-                    Label lblarea = new Label((i+1) + ". " + new Tasks(tftask.getText(), datepick.getValue()));
-                    vb1.getChildren().addAll(lblarea);
+            // Converting Task object to string
+            ArrayList<String> stringTasks = new ArrayList<>();
+            for (ArrayList<Tasks> group : main_server) {
+                for (Tasks t : group) {
+                    stringTasks.add(t.toString());
                 }
-                else {
-                    Label lblarea = new Label((i+1) + ". " + new Tasks(tftask.getText()));
-                    vb1.getChildren().addAll(lblarea);
-                    
-                }
-            } // (i+1) so that it starts with 1 instead of 0 (due to i = 0)
-            vbmain.getChildren().add(vb1); // bro idk why add() doesnt work, but if aint broke dont fix 
+            }
+            
+            // Converted Task (w/ date) object to string, then splits (soon to be used by sort by date)
+            Label lblarea = new Label();
+            int lbl_id = 0;
+            for (String st : stringTasks) {
+                lbl_id++;
+                String[] parts = st.split(" - ", 2); // split only once at the first " - "
+                
+                String task = parts[0];
+                String date = parts[1];
+                date_server.add(Tasks.fromString(date));
+                
+                lblarea.setText(lbl_id + ". " + st);
+            }
+            vb1.getChildren().addAll(lblarea);
         });
         //
 
@@ -146,7 +156,10 @@ public class finals extends Application {
         hb2.getChildren().addAll(btnadd, btndel, btnmod, btnsort);
         hb3.getChildren().addAll(lbltitle);
 //        hb4.getChildren().addAll(lblarea); --- previous position of hb4
-        vbmain.getChildren().addAll(hb1, hb2, hb3, vb1);
+        vbmain.getChildren().addAll(hb1, hb2, hb3);
+        for (int i = 0; i < main_server.size(); i++) {
+            vbmain.getChildren().addAll(vb1);
+        }
         root.getChildren().addAll(vbmain);
         root.setPadding(new Insets(20));
         ps.setTitle("To-Do List with Dates");
