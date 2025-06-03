@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import sun.util.calendar.BaseCalendar.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import javafx.geometry.Pos;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class finals extends Application {
     
     ArrayList<ArrayList<Tasks>> main_server = new ArrayList();
+    ArrayList<Integer> live_id = new ArrayList<>(); // Live ID listener 
     ArrayList<Tasks> date_server = new ArrayList<>();
     
     
@@ -61,6 +63,38 @@ public class finals extends Application {
         vbmain.setSpacing(5);
         
         
+        // RUNNABLE METHODS
+        //--------------------------------------------
+        // update VBox
+        Runnable updateVBox = () -> {
+            vb1.getChildren().clear();
+            // Converting Task object to string
+            ArrayList<String> stringTasks = new ArrayList<>();
+            for (ArrayList<Tasks> group : main_server) {
+                for (Tasks tsks : group) {
+                    stringTasks.add(tsks.toString());
+                }
+            }
+            
+            // Converted Task (w/ date) object to string, then splits (soon to be used by sort by date)
+            int lbl_id = 0;
+            for (String st : stringTasks) {
+                lbl_id++;
+                Label lblarea = new Label();
+                
+                String[] parts = st.split(" - ", 2); // split only once at the first " - "
+                
+                String task = parts[0];
+                String date = parts[1];
+                date_server.add(Tasks.fromString(date));
+                
+                lblarea.setText(lbl_id + ". " + st);
+                vb1.getChildren().add(lblarea);
+            }
+        };
+        //
+
+
         // LABELS
         //--------------------------------------------
         // - hb1 (labels)
@@ -89,11 +123,14 @@ public class finals extends Application {
         // TXT FIELDS
         TextField tftask = new TextField();
         tftask.setPromptText("Task description");
-        Scene scn1 = new Scene(root);
+        TextField tfindex = new TextField();
+        tfindex.setPromptText("Task ID");
         //
         
         // DATE PICKER
         DatePicker datepick = new DatePicker();
+        datepick.setPromptText("Due date");
+        datepick.setEditable(false);
         //
         
 
@@ -102,8 +139,9 @@ public class finals extends Application {
         Label lbltitle = new Label("Tasks:" + "Noob");
         //
         
-
-        // BTN METHODS
+        // ---------------------------------------------------------------------------------------------
+        // ADD (method)
+        // ---------------------------------------------------------------------------------------------
         // --- needs indexing to specify which index to remove (as shown:)
         AtomicInteger btnadd_count = new AtomicInteger(0); //AtomicInt (bluetooth int version)
         btnadd.setOnAction(e -> {
@@ -113,19 +151,19 @@ public class finals extends Application {
             if (datepick.getValue() != null) {
                 System.out.println("if ran");
                 System.out.println(datepick.getValue());
-                taskdate_placeholder.add(new Tasks(tftask.getText(), datepick.getValue()));
+                taskdate_placeholder.add(new Tasks(tftask.getText().trim(), datepick.getValue()));
                 Tasks date = new Tasks(datepick.getValue());
                 date_server.add(date);
             }
             else {
-                taskdate_placeholder.add(new Tasks(tftask.getText()));
+                taskdate_placeholder.add(new Tasks(tftask.getText().trim()));
                 System.out.println("else ran");
             }
             
             System.out.println(taskdate_placeholder); // -- 4 remove
             main_server.add(taskdate_placeholder);
             System.out.println(main_server); // -- 4 remove
-
+            
             // Converting Task object to string
             ArrayList<String> stringTasks = new ArrayList<>();
             for (ArrayList<Tasks> group : main_server) {
@@ -133,29 +171,38 @@ public class finals extends Application {
                     stringTasks.add(t.toString());
                 }
             }
-            
-            // Converted Task (w/ date) object to string, then splits (soon to be used by sort by date)
-            Label lblarea = new Label();
-            int lbl_id = 0;
-            for (String st : stringTasks) {
-                lbl_id++;
-                String[] parts = st.split(" - ", 2); // split only once at the first " - "
-                
-                String task = parts[0];
-                String date = parts[1];
-                date_server.add(Tasks.fromString(date));
-                
-                lblarea.setText(lbl_id + ". " + st);
-            }
-            vb1.getChildren().addAll(lblarea);
+            updateVBox.run();
+            System.out.println(stringTasks);
+            System.out.println("live_id print below");
+            System.out.println(live_id);
+            // vb1.getChildren().addAll(lblarea);
+            tfindex.clear();
+            tftask.clear();
         });
+
+        // ---------------------------------------------------------------------------------------------
+        // DELETE (method) 
+        // ---------------------------------------------------------------------------------------------
+        btndel.setOnAction(d -> {
+            try {
+                int task_selected = Integer.parseInt(tfindex.getText().trim()); 
+                main_server.remove(task_selected - 1);
+                updateVBox.run();
+                System.out.println(main_server);
+            } 
+            catch (Exception e) {
+                System.out.println(e);
+            }
+        });
+        // ---------------------------------------------------------------------------------------------
+        
+        
         //
-
-
-        hb1.getChildren().addAll(lbltask, tftask, lbldate, datepick, lblindex);
+        Scene scn1 = new Scene(root);
+        hb1.getChildren().addAll(lbltask, tftask, lbldate, datepick, lblindex, tfindex);
         hb2.getChildren().addAll(btnadd, btndel, btnmod, btnsort);
         hb3.getChildren().addAll(lbltitle);
-//        hb4.getChildren().addAll(lblarea); --- previous position of hb4
+        //        hb4.getChildren().addAll(lblarea); --- previous position of hb4
         vbmain.getChildren().addAll(hb1, hb2, hb3, vb1);
         root.getChildren().addAll(vbmain);
         root.setPadding(new Insets(20));
@@ -163,5 +210,7 @@ public class finals extends Application {
         ps.setMaximized(false);
         ps.setScene(scn1);
         ps.show();
-    }
+
+    };
 }
+

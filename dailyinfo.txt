@@ -1,0 +1,14 @@
+Day 1:
+- i started this
+
+Day 2:
+- just kept building the gui, free of errors
+- i started debugging some blocks which led me to inhumane fking errors which i have never encountered. But eventually, i found my breakthrough. 
+- some notable error was some GUI errors (label area not showing, labels appearing horizontally). But the only problem that fixed that was the vb1 (sub-vbmain) was set to HBox instead of VBox.
+
+Day 3:
+- i started late, 4 hours of firewatch good tho. It helped me fixing the error that kept occuring.
+- and only then i realized that i wasn't placing some of my functions to methods. I just singlehandedly made them be with the main code block. 
+- i also discovered i was stupid, cuz i created too much for branches and too many arraylist (i made them initially to server as a reference for main_server).
+- need to keep in mind how some prior logic works not only have keen knowledge, but to put up to use. Just like how i didn't think of creating an update typa method for the label area.
+- but happy to see that the stupidity made me hit 2 birds w 1 stone, cuz i made their indexes/id change (whenever they are deleted) which is caused by the "update" method. SEE HOW USEFUL THAT THING WAS.

@@ -4,6 +4,8 @@ public class Tasks {
 
     private String task;
     private LocalDate date;
+    private int id;
+    private String name;
 
     Tasks(String newTask, LocalDate newDate) {
         task = newTask;  
@@ -18,13 +20,22 @@ public class Tasks {
         date = newDate;
     }
 
+    Tasks(int newId){
+        id = newId;
+    }
+
     public String getTask() {
         return task;
+    }
+
+    public void setTask(String tasks) {
+        task = tasks;
     }
 
     public LocalDate getDate() {
         return date;
     }
+    
 
     @Override
     public String toString() {
@@ -53,5 +64,11 @@ public class Tasks {
         } else {
             return new Tasks(taskPart, LocalDate.parse(datePart));  // Constructor with date
         }
+
     }
+
+    public boolean isEmpty() {
+        return name == null || name.isEmpty();
+    }
+
 }
