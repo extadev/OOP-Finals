@@ -48,11 +48,11 @@ public class finals extends Application {
         hb3.setPrefHeight(100);
         hb3.setSpacing(5);
         
-        HBox vb1 = new HBox(); 
+        VBox vb1 = new VBox(); 
         vb1.setAlignment(Pos.TOP_LEFT);
         vb1.setPrefWidth(500);  
-        vb1.setPrefHeight(20);
-        vb1.setSpacing(5);
+        vb1.setPrefHeight(10);
+        vb1.setSpacing(3);
         
         VBox vbmain = new VBox();
         vbmain.setAlignment(Pos.TOP_LEFT);
@@ -105,7 +105,7 @@ public class finals extends Application {
 
         // BTN METHODS
         // --- needs indexing to specify which index to remove (as shown:)
-        AtomicInteger btnadd_count = new AtomicInteger(0); //AtomicInt (bluetooth int vers.)
+        AtomicInteger btnadd_count = new AtomicInteger(0); //AtomicInt (bluetooth int version)
         btnadd.setOnAction(e -> {
             btnadd_count.incrementAndGet(); // similar to ++ incrementing to int (but to AtomicInt)
             ArrayList<Tasks> taskdate_placeholder = new ArrayList();
@@ -156,10 +156,7 @@ public class finals extends Application {
         hb2.getChildren().addAll(btnadd, btndel, btnmod, btnsort);
         hb3.getChildren().addAll(lbltitle);
 //        hb4.getChildren().addAll(lblarea); --- previous position of hb4
-        vbmain.getChildren().addAll(hb1, hb2, hb3);
-        for (int i = 0; i < main_server.size(); i++) {
-            vbmain.getChildren().addAll(vb1);
-        }
+        vbmain.getChildren().addAll(hb1, hb2, hb3, vb1);
         root.getChildren().addAll(vbmain);
         root.setPadding(new Insets(20));
         ps.setTitle("To-Do List with Dates");
