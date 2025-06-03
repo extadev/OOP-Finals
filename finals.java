@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -20,7 +21,6 @@ public class finals extends Application {
     ArrayList<ArrayList<Tasks>> main_server = new ArrayList();
     ArrayList<Integer> live_id = new ArrayList<>(); // Live ID listener 
     ArrayList<Tasks> date_server = new ArrayList<>();
-    
     
     public static void main(String[] args) {
         launch(args);
@@ -37,7 +37,6 @@ public class finals extends Application {
         hb1.setPrefHeight(32);
         hb1.setSpacing(5);
 
-
         HBox hb2 = new HBox(); 
         hb2.setAlignment(Pos.TOP_LEFT);
         hb2.setPrefWidth(1000);  
@@ -47,7 +46,7 @@ public class finals extends Application {
         HBox hb3 = new HBox(); 
         hb3.setAlignment(Pos.TOP_LEFT);
         hb3.setPrefWidth(1000);  
-        hb3.setPrefHeight(100);
+        hb3.setPrefHeight(1);
         hb3.setSpacing(5);
         
         VBox vb1 = new VBox(); 
@@ -136,13 +135,12 @@ public class finals extends Application {
 
         // DISPLAYING
         // - hb3 (title area)
-        Label lbltitle = new Label("Tasks:" + "Noob");
+        Label lbltitle = new Label("Tasks:");
         //
         
         // ---------------------------------------------------------------------------------------------
         // ADD (method)
         // ---------------------------------------------------------------------------------------------
-        // --- needs indexing to specify which index to remove (as shown:)
         AtomicInteger btnadd_count = new AtomicInteger(0); //AtomicInt (bluetooth int version)
         btnadd.setOnAction(e -> {
             ArrayList<Tasks> taskdate_placeholder = new ArrayList();
@@ -160,9 +158,9 @@ public class finals extends Application {
                 System.out.println("else ran");
             }
             
-            System.out.println(taskdate_placeholder); // -- 4 remove
+            // System.out.println(taskdate_placeholder); // -- 4 remove
             main_server.add(taskdate_placeholder);
-            System.out.println(main_server); // -- 4 remove
+            // System.out.println(main_server); // -- 4 remove
             
             // Converting Task object to string
             ArrayList<String> stringTasks = new ArrayList<>();
@@ -173,11 +171,12 @@ public class finals extends Application {
             }
             updateVBox.run();
             System.out.println(stringTasks);
-            System.out.println("live_id print below");
-            System.out.println(live_id);
+            System.out.println("main_server below:");
+            System.out.println(main_server);
             // vb1.getChildren().addAll(lblarea);
             tfindex.clear();
             tftask.clear();
+            datepick.setValue(null);
         });
 
         // ---------------------------------------------------------------------------------------------
@@ -189,6 +188,9 @@ public class finals extends Application {
                 main_server.remove(task_selected - 1);
                 updateVBox.run();
                 System.out.println(main_server);
+                tfindex.clear();
+                tftask.clear();
+                datepick.setValue(null);
             } 
             catch (Exception e) {
                 System.out.println(e);
@@ -204,14 +206,33 @@ public class finals extends Application {
                 taskdate_placeholder.add(new Tasks(tftask.getText().trim(), datepick.getValue()));
                 main_server.set(task_selected-1, taskdate_placeholder);
                 updateVBox.run();
+                tfindex.clear();
+                tftask.clear();
+                datepick.setValue(null);
             }
             catch (Exception e) {
                 System.out.println(e);
             }
         });
-
-
+        // ---------------------------------------------------------------------------------------------
+        // SORT BY DATE (method) 
+        // ---------------------------------------------------------------------------------------------
+        btnsort.setOnAction(e -> {
+            main_server.sort(Comparator.comparing(
+                group -> group.isEmpty() || group.get(0).getDate() == null 
+                    ? LocalDate.MAX  // put no-date items at the end
+                    : group.get(0).getDate()
+                ));
+            System.out.println("main_server:");
+            System.out.println(main_server);
+            updateVBox.run();
+            tfindex.clear();
+            tftask.clear();
+            datepick.setValue(null);
+        });
         //
+
+
         Scene scn1 = new Scene(root);
         hb1.getChildren().addAll(lbltask, tftask, lbldate, datepick, lblindex, tfindex);
         hb2.getChildren().addAll(btnadd, btndel, btnmod, btnsort);

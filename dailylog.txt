@@ -14,3 +14,4 @@ Day 3:
 - but happy to see that the stupidity made me hit 2 birds w 1 stone, cuz i made their indexes/id change (whenever they are deleted) which is caused by the "update" method. SEE HOW USEFUL THAT THING WAS.
 - ALSO I JUST FOUND OUT THAT YOU CAN CREATE A METHOD INSIDE A METHOD. USING CLASS "Runnable". Idk if this is just limited to JavaFX.
 - FINALLY METHOD WORKS TOO, IDK WHY IS THIS GOING SO SMOOTH.
+- and for the last, sort by date works. I had to find some help on reddit and quora, i used some code suggestion of a responder, so im currently clueless on how the block sort by date functions.
