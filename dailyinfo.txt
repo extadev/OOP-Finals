@@ -12,3 +12,5 @@ Day 3:
 - i also discovered i was stupid, cuz i created too much for branches and too many arraylist (i made them initially to server as a reference for main_server).
 - need to keep in mind how some prior logic works not only have keen knowledge, but to put up to use. Just like how i didn't think of creating an update typa method for the label area.
 - but happy to see that the stupidity made me hit 2 birds w 1 stone, cuz i made their indexes/id change (whenever they are deleted) which is caused by the "update" method. SEE HOW USEFUL THAT THING WAS.
+- ALSO I JUST FOUND OUT THAT YOU CAN CREATE A METHOD INSIDE A METHOD. USING CLASS "Runnable". Idk if this is just limited to JavaFX.
+- FINALLY METHOD WORKS TOO, IDK WHY IS THIS GOING SO SMOOTH.

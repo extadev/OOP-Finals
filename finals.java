@@ -145,8 +145,8 @@ public class finals extends Application {
         // --- needs indexing to specify which index to remove (as shown:)
         AtomicInteger btnadd_count = new AtomicInteger(0); //AtomicInt (bluetooth int version)
         btnadd.setOnAction(e -> {
-            btnadd_count.incrementAndGet(); // similar to ++ incrementing to int (but to AtomicInt)
             ArrayList<Tasks> taskdate_placeholder = new ArrayList();
+            btnadd_count.incrementAndGet(); // similar to ++ incrementing to int (but to AtomicInt)
             
             if (datepick.getValue() != null) {
                 System.out.println("if ran");
@@ -195,8 +195,22 @@ public class finals extends Application {
             }
         });
         // ---------------------------------------------------------------------------------------------
-        
-        
+        // MODIFY (method) 
+        // ---------------------------------------------------------------------------------------------
+        btnmod.setOnAction(d -> {
+            try {
+                ArrayList<Tasks> taskdate_placeholder = new ArrayList();
+                int task_selected = Integer.parseInt(tfindex.getText().trim()); 
+                taskdate_placeholder.add(new Tasks(tftask.getText().trim(), datepick.getValue()));
+                main_server.set(task_selected-1, taskdate_placeholder);
+                updateVBox.run();
+            }
+            catch (Exception e) {
+                System.out.println(e);
+            }
+        });
+
+
         //
         Scene scn1 = new Scene(root);
         hb1.getChildren().addAll(lbltask, tftask, lbldate, datepick, lblindex, tfindex);
